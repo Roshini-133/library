@@ -1,12 +1,16 @@
 import { BookModel} from "../model";
 import { Request, Response } from "express";
-
+import {validateBookDetailsDTO,validateSpecificBookDTO,validateUpdateBookDTO,validateDeleteBookDTO} from "./booksValidator"
 
 //add new book
 const addbook = async(req:Request,res:Response) =>{
-  //console.log("hi")
-
+  const validationResult = validateBookDetailsDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
   const {bookId,bookName,author,quantity} = req.body
+  
+
   try{
         await BookModel.create({bookId,bookName,author,quantity})
         res.status(200).json({message:'success'})
@@ -19,11 +23,9 @@ const addbook = async(req:Request,res:Response) =>{
 
 //Retrieves all the available book
 const getbook = async(req:Request,res:Response)=>{
-  //const bookId = req.body
   try{
     
         const allbooks = await BookModel.find()
-        console.log(allbooks)
         res.status(200).json({message:'success',data : allbooks})
   }
   catch(error){
@@ -34,10 +36,15 @@ const getbook = async(req:Request,res:Response)=>{
 
 //gets specific book
 const getspecificbook = async(req:Request,res:Response) =>{
+  const data :bookstype = req.body 
+  const validationResult = validateSpecificBookDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
+
   try{
-  const bookid :bookstype = req.body 
-  const spebook = await BookModel.find(bookid)
-  res.status(200).json({message:'success',data:spebook})
+  const specificBook = await BookModel.find(data)
+  res.status(200).json({message:'success',data:specificBook})
 }
 catch(error)
 {
@@ -52,6 +59,10 @@ type bookstype ={
 
 //update book name
 const updatebook = async(req:Request,res:Response)=>{
+  const validationResult = validateUpdateBookDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
   try{
   const bookid = req.body.bookId
   const upname = req.body.bookName
@@ -64,6 +75,10 @@ const updatebook = async(req:Request,res:Response)=>{
 }
 
 const deletebook = async(req:Request,res:Response)=>{
+  const validationResult = validateDeleteBookDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
   try{
     const bookid = req.body.bookId
     await BookModel.deleteOne({bookId :bookid})

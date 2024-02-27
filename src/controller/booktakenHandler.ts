@@ -1,12 +1,15 @@
 import { IssuebookModel, BookModel } from "../model";
 import { Request, Response } from "express";
-
+import {validateIssueBookDTO} from "./booksTakenValidator"
 //to issue book to the particular student and prints error if there is no availability of book
 
 const studbook = async (req: Request, res: Response) => {
+  const validationResult = validateIssueBookDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
   const details: bookstaken = req.body;
   const id = details.bookId;
-  console.log(details);
   try {
     const book = await BookModel.findOne({ bookId: id });
     console.log(book);
@@ -36,13 +39,14 @@ type bookstaken = {
 
 // To return the book and know whether he/she has fine or not
 const returnBooks = async(req: Request, res: Response)=>{
+  const validationResult = validateIssueBookDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
     const details: bookstaken = req.body;
     const issueDate = new Date(details.issueDate);
     const id = details.bookId;
     const currentDate = new Date();
-    console.log(currentDate);
-    console.log(issueDate);
-
     try{
         issueDate.setDate(issueDate.getDate() + 5)
         console.log(issueDate);

@@ -1,11 +1,13 @@
 import { StudentModel} from "../model";
 import { Request, Response } from "express";
-
+import {validateStudentDetailsDTO,validateSpecificStudentsDTO,validateUpdateStudentDTO,validateDeleteStudentDTO} from "./studentValidator"
 
 //add new student
 const addstudent = async(req:Request,res:Response) =>{
-  console.log("hi")
-
+  const validationResult = validateStudentDetailsDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
   const {rollno,name,department} = req.body
   try{
         await StudentModel.create({rollno,name,department})
@@ -19,7 +21,7 @@ const addstudent = async(req:Request,res:Response) =>{
 
 //Retrieves all the available student
 const getallstudents = async(req:Request,res:Response)=>{
-  //const bookId = req.body
+
   try{
     
         const allstudents = await StudentModel.find()
@@ -34,6 +36,10 @@ const getallstudents = async(req:Request,res:Response)=>{
 
 //gets specific student
 const getspecificstudent = async(req:Request,res:Response) =>{
+  const validationResult = validateSpecificStudentsDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
   try{
   const stud :student= req.body 
   const specstudent = await StudentModel.find(stud)
@@ -51,6 +57,10 @@ catch(error)
 
 //update student name
 const updatestudent = async(req:Request,res:Response)=>{
+  const validationResult = validateUpdateStudentDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
   try{
   const rollno = req.body.rollNo
   const upname = req.body.name
@@ -64,6 +74,10 @@ const updatestudent = async(req:Request,res:Response)=>{
 
 //deletes student name
 const deletestudent = async(req:Request,res:Response)=>{
+  const validationResult = validateDeleteStudentDTO(req.body);
+  if(validationResult.error){
+    return res.status(400).json({message:validationResult})
+  }
   try{
     const rollno = req.body.rollNo
     await StudentModel.deleteOne({rollNo :rollno})
