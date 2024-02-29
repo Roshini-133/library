@@ -1,0 +1,10 @@
+//Response message for book details
+export const validatorError = "Bad request"
+export const studentDetailsAdded = "Student detail has been added sucessfully"
+export const displayAllstudents = "Details of all the students has been displayed"
+export const displaySpecificStudentDetail = "Details of specific student has been displayed"
+export const serverError = "Internal server error has occured"
+export const alreadyExists = "The details of the student already exists"
+export const doesNotExists = "The details of the student does not exists"
+export const updateSpecificStudentDetail = "Details of specific student has been updated"
+export const deleteSpecificStudentDetails = "Details of specific student has been deleted"
