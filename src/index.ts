@@ -1,23 +1,26 @@
 import express from "express";
-
+import { connectMongo } from "./db";
 import cors from "cors";
-import router from "./Router/bookrouter.js"
-import student from "./Router/studentrouter.js"
-import book from "./Router/booktakenrouter.js"
-import returnbook from "./Router/booktakenrouter.js"
+import issueBook from "./Router/bookTakenRouter.js"
+import student from "./Router/studentRouter.js"
+import book from "./Router/bookTakenRouter.js"
+import * as dotenv from 'dotenv';
 
+dotenv.config();
+
+const baseUrl = process.env.BASE_URL;
 const app= express();
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'http://localhost:5000', 
+  origin: baseUrl, 
 };
 
 app.use(cors(corsOptions));
 
 const port: number = 5000;
 
-import { connectMongo } from "./db";
+
 
 connectMongo;
 
@@ -27,7 +30,6 @@ app.listen(port, () => {
 });
 
 
-app.use(router)
-app.use(student)
-app.use(book)
-app.use(returnbook)
+app.use('/book', book)
+app.use('/student',student)
+app.use('/issueBook',issueBook)

@@ -1,6 +1,19 @@
 import Joi from "joi";
 
-function validateStudentDetailsDTO(data: any) {
+type StudentDetails={
+  rollNo : number,
+  name:string,
+  department : string
+}
+type UpdateStudentDetails={
+  rollNo : number,
+  name:string
+}
+type SpecificChangeInStudentDetails={
+  rollNo:number
+}
+
+export function validateStudentDetailsDTO(data: StudentDetails) {
   const schema = Joi.object({
     rollNo: Joi.number().required(),
     name: Joi.string().required(),
@@ -9,32 +22,24 @@ function validateStudentDetailsDTO(data: any) {
   return schema.validate(data);
 }
 
-function validateSpecificStudentsDTO(data: any) {
+export function validateSpecificStudentsDTO(data: SpecificChangeInStudentDetails) {
   const schema = Joi.object({
-    rollNo: Joi.number().optional(),
-    name: Joi.string().optional(),
-    department: Joi.string().optional(),
+    rollNo: Joi.number().required()
+    
   });
   return schema.validate(data);
 }
-function validateUpdateStudentDTO(data: any) {
+export function validateUpdateStudentDTO(data: UpdateStudentDetails) {
   const schema = Joi.object({
     rollNo: Joi.number().required(),
-    name: Joi.string().optional(),
-    department: Joi.string().optional(),
+    name: Joi.string().optional()
   });
   return schema.validate(data);
 }
-function validateDeleteStudentDTO(data: any) {
+export function validateDeleteStudentDTO(data: SpecificChangeInStudentDetails) {
   const schema = Joi.object({
     rollNo: Joi.number().required(),
   });
   return schema.validate(data);
 }
 
-export {
-  validateStudentDetailsDTO,
-  validateSpecificStudentsDTO,
-  validateUpdateStudentDTO,
-  validateDeleteStudentDTO,
-};
